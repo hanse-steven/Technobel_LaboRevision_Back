@@ -1,6 +1,10 @@
 using LaboRevision.BLL.Services;
+using LaboRevision.Converters;
 using LaboRevision.DAL.Repositories;
 using LaboRevision.Hubs;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Npgsql;
 
 namespace LaboRevision;
 
@@ -9,6 +13,14 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        builder.Logging.ClearProviders();
+        builder.Logging.AddConsole();
+
+        builder.Services.AddTransient<NpgsqlConnection>(s =>
+        {
+            string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            return new NpgsqlConnection(connectionString);
+        });
 
         // Add services to the container.
 
@@ -17,11 +29,13 @@ public class Program
         builder.Services.AddScoped<ProductRepository>();
         builder.Services.AddScoped<ProductService>();
         
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddScoped<CartRepository>();
+        builder.Services.AddScoped<CartService>();
 
-        builder.Services.AddSignalR();
+        builder.Services.AddSignalR().AddJsonProtocol(options =>
+        {
+            options.PayloadSerializerOptions.Converters.Add(new ProductShortDTOConverter());
+        });
         
         builder.Services.AddDistributedMemoryCache();
         builder.Services.AddSession(o =>
@@ -40,13 +54,7 @@ public class Program
         }));
 
         var app = builder.Build();
-
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+        
         app.UseHttpsRedirection();
 
         app.UseCors();
@@ -58,6 +66,7 @@ public class Program
         app.MapControllers();
 
         app.MapHub<CartHub>("/hub/Cart");
+        app.MapHub<ProductHub>("/hub/Product");
 
         app.Run();
     }

@@ -4,7 +4,7 @@ namespace LaboRevision.Mapper;
 
 public static class ProductMapper
 {
-    public static DTO.ProductDTO ToDTO(this Models.Product model)
+    public static DTO.ProductDTO TotDTO(this Models.Product model)
     {
         return new DTO.ProductDTO
         {
@@ -12,6 +12,16 @@ public static class ProductMapper
             Name = model.Name,
             Price = model.Price,
             Quantity = model.Quantity
+        };
+    }
+    
+    public static DTO.ProductShortDTO ToShortDTO(this Models.Product model)
+    {
+        return new DTO.ProductShortDTO
+        {
+            Id = model.Id,
+            Name = model.Name,
+            Price = model.Price,
         };
     }
 }
