@@ -32,6 +32,9 @@ public class Program
         builder.Services.AddScoped<CartRepository>();
         builder.Services.AddScoped<CartService>();
 
+        builder.Services.AddScoped<InvoiceRepository>();
+        builder.Services.AddScoped<InvoiceService>();
+
         builder.Services.AddSignalR().AddJsonProtocol(options =>
         {
             options.PayloadSerializerOptions.Converters.Add(new ProductShortDTOConverter());

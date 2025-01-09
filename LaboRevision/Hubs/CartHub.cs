@@ -9,10 +9,12 @@ namespace LaboRevision.Hubs;
 public class CartHub : Hub
 {
     private readonly CartService _cartService;
+    private readonly InvoiceService _invoiceService;
     private readonly ILogger<CartHub> _logger;
-    public CartHub(CartService cartService, ILogger<CartHub> logger)
+    public CartHub(CartService cartService, InvoiceService invoiceService, ILogger<CartHub> logger)
     {
         _cartService = cartService;
+        _invoiceService = invoiceService;
         _logger = logger;
     }
 
@@ -38,6 +40,13 @@ public class CartHub : Hub
     {
         _cartService.ModifyQuantityOfProduct(Context.GetSession(), product, quantity);
         _logger.LogInformation("Quantity of product {product} modified to {quantity}", product, quantity);
+        await RefreshCart();
+    }
+
+    public async Task ValidateCart(string email)
+    {
+        _invoiceService.CreateInvoice(Context.GetSession(), email);
+        _logger.LogInformation("Cart validated");
         await RefreshCart();
     }
 }
