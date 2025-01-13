@@ -11,7 +11,11 @@ public class CartHub : Hub
     private readonly CartService _cartService;
     private readonly InvoiceService _invoiceService;
     private readonly ILogger<CartHub> _logger;
-    public CartHub(CartService cartService, InvoiceService invoiceService, ILogger<CartHub> logger)
+    public CartHub(
+        CartService cartService, 
+        InvoiceService invoiceService, 
+        ILogger<CartHub>? logger
+    )
     {
         _cartService = cartService;
         _invoiceService = invoiceService;

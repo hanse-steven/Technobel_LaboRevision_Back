@@ -20,9 +20,10 @@ public class CartRepository
                 ""session"",
                 ""product"",
                 ""quantity""
-            FROM ""cartitem"";
+            FROM ""cartitem""
+            WHERE session = @session;
         ";
-        return this._conn.Query<CartItem>(query);
+        return this._conn.Query<CartItem>(query, new { session });
     }
     
     public bool AddProduct(Guid session, Guid product, int quantity)

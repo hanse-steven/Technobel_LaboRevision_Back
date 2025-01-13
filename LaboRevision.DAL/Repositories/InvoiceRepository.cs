@@ -14,13 +14,10 @@ public class InvoiceRepository
     
     public bool CreateInvoice(Guid session, string email)
     {
-        return this._conn.Execute(
-            "createInvoice",new
-            {
-                session_client = session,
-                email_client = email
-            }, 
-            commandType: CommandType.StoredProcedure
-        ) > 0;
+        return this._conn.Execute(@"CALL CreateInvoice(@session,@email)", new
+        {
+            session = session,
+            email = email
+        }) > 0;
     }
 }

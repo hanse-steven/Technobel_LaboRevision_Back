@@ -34,7 +34,7 @@ public class Program
 
         builder.Services.AddScoped<InvoiceRepository>();
         builder.Services.AddScoped<InvoiceService>();
-
+        
         builder.Services.AddSignalR().AddJsonProtocol(options =>
         {
             options.PayloadSerializerOptions.Converters.Add(new ProductShortDTOConverter());
@@ -53,7 +53,7 @@ public class Program
             o.AllowCredentials()
                 .AllowAnyMethod()
                 .AllowAnyHeader()
-                .WithOrigins("http://localhost:4200");
+                .WithOrigins("http://localhost:4200", "http://192.168.0.201:4200");
         }));
 
         var app = builder.Build();

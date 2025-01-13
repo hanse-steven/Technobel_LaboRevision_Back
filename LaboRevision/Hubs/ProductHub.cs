@@ -15,9 +15,15 @@ public class ProductHub : Hub
         _logger = logger;
     }
 
+    private IEnumerable<ProductDTO> Products => _productService.GetProducts().Select(p => p.TotDTO());
+
+    public async Task RefreshCartFromAll()
+    {
+        await Clients.All.SendAsync("GetProducts", Products);
+    }
+
     public async Task GetProducts()
     {
-        IEnumerable<ProductDTO> products = _productService.GetProducts().Select(p => p.TotDTO());
-        await Clients.Caller.SendAsync("GetProducts", products);
+        await Clients.Caller.SendAsync("GetProducts", Products);
     }
 }

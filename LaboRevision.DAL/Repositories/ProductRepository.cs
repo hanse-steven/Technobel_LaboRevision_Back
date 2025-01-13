@@ -20,7 +20,8 @@ public class ProductRepository
                 ""name"",
                 ""price"",
                 ""quantity""
-            FROM ""product"";
+            FROM ""product""
+            ORDER BY ""quantity"" = 0, ""name"";
         ";
         return this._conn.Query<Product>(query);
     }
