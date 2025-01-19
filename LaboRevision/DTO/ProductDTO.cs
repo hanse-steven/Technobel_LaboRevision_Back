@@ -14,3 +14,10 @@ public class ProductShortDTO
     public string Name { get; set; }
     public decimal Price { get; set; }
 }
+
+public class ProductInvoiceDTO
+{
+    public required string Name { get; set; }
+    public decimal Price { get; set; }
+    public int Quantity { get; set; }
+}

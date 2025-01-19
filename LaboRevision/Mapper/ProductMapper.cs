@@ -1,3 +1,4 @@
+using LaboRevision.DTO;
 using Models = LaboRevision.BLL.Models;
 
 namespace LaboRevision.Mapper;
@@ -22,6 +23,16 @@ public static class ProductMapper
             Id = model.Id,
             Name = model.Name,
             Price = model.Price,
+        };
+    }
+
+    public static DTO.ProductInvoiceDTO ToDTO(this Models.ProductShort model)
+    {
+        return new ProductInvoiceDTO
+        {
+            Name = model.Name,
+            Price = model.Price,
+            Quantity = model.Quantity
         };
     }
 }
